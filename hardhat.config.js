@@ -1,0 +1,31 @@
+require("@nomicfoundation/hardhat-toolbox");
+require("dotenv").config();
+
+// Optional Sepolia config (bonus). Only used if the env vars are present;
+// local development never needs these.
+const SEPOLIA_RPC_URL = process.env.SEPOLIA_RPC_URL || "";
+const PRIVATE_KEY = process.env.PRIVATE_KEY || "";
+
+/** @type import('hardhat/config').HardhatUserConfig */
+module.exports = {
+  solidity: {
+    version: "0.8.24",
+    settings: {
+      optimizer: { enabled: true, runs: 200 },
+    },
+  },
+  networks: {
+    // `npx hardhat node` exposes this automatically; listed for clarity.
+    localhost: {
+      url: "http://127.0.0.1:8545",
+    },
+    ...(SEPOLIA_RPC_URL && PRIVATE_KEY
+      ? {
+          sepolia: {
+            url: SEPOLIA_RPC_URL,
+            accounts: [PRIVATE_KEY],
+          },
+        }
+      : {}),
+  },
+};

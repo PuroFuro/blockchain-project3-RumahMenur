@@ -1,0 +1,19 @@
+# Dependencies
+node_modules/
+frontend/node_modules/
+
+# Secrets
+.env
+frontend/.env
+
+# Hardhat
+artifacts/
+cache/
+typechain-types/
+
+# Vite / frontend build
+frontend/dist/
+
+# Logs / OS
+*.log
+.DS_Store
