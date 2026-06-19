@@ -1,5 +1,6 @@
-require("@nomicfoundation/hardhat-toolbox");
-require("dotenv").config();
+import "@nomicfoundation/hardhat-toolbox";
+import dotenv from "dotenv";
+dotenv.config();
 
 // Optional Sepolia config (bonus). Only used if the env vars are present;
 // local development never needs these.
