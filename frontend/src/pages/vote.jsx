@@ -12,7 +12,7 @@ export default function VotePage({
 
   if (!isConnected) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[60vh] text-center p-8 bg-gray-50 dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-800">
+      <div className="flex flex-col items-center justify-center mx-auto min-h-screen text-center p-8 rounded-xl ">
         <svg
           className="w-16 h-16 text-yellow-500 mb-4"
           fill="none"
@@ -22,11 +22,11 @@ export default function VotePage({
         >
           <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
         </svg>
-        <h2 className="text-2xl font-bold mb-2 text-slate-900 dark:text-white">
+        <h2 className="text-2xl font-mono font-bold mb-2 text-slate-900 dark:text-white">
           Wallet Not Connected
         </h2>
         <p className="text-slate-500 dark:text-slate-400">
-          Please connect your MetaMask wallet via the navbar to participate in the election.
+          Please connect your MetaMask wallet via the navbar to participate in the election
         </p>
       </div>
     );
@@ -34,7 +34,7 @@ export default function VotePage({
 
   if (hasVoted) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[60vh] text-center p-8 bg-green-50/50 dark:bg-emerald-950/20 rounded-xl border border-green-200 dark:border-emerald-900/50">
+      <div className="flex flex-col items-center justify-center text-center p-8 bg-green-50/50 dark:bg-emerald-950/20 rounded-xl border border-green-200 dark:border-emerald-900/50">
         <motion.div
           initial={{ scale: 0, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
@@ -78,7 +78,6 @@ export default function VotePage({
     }
   };
 
-  // Framer Motion variants for the staggered list animation
   const containerVariants = {
     hidden: { opacity: 0 },
     show: {

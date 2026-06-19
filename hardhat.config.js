@@ -1,9 +1,6 @@
-import "@nomicfoundation/hardhat-toolbox";
-import dotenv from "dotenv";
-dotenv.config();
+require("@nomicfoundation/hardhat-toolbox");
+require("dotenv").config();
 
-// Optional Sepolia config (bonus). Only used if the env vars are present;
-// local development never needs these.
 const SEPOLIA_RPC_URL = process.env.SEPOLIA_RPC_URL || "";
 const PRIVATE_KEY = process.env.PRIVATE_KEY || "";
 
