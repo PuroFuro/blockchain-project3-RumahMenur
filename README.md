@@ -1,41 +1,139 @@
 # Voting dApp
 
-On-chain voting application. Connect a wallet, view candidates, cast one vote
-(double-voting blocked at the contract level), watch results update live.
+## Deskripsi
 
-**Stack:** Solidity + Hardhat · React + Vite · ethers.js v6 · MetaMask
+Aplikasi voting on-chain yang memungkinkan pengguna untuk memilih kandidat secara transparan dan terdesentralisasi. Setiap alamat wallet hanya bisa memberikan satu suara (dijaga di level smart contract), dan hasil voting diperbarui secara real-time melalui event listening.
 
+## Anggota Kelompok
 
-## Demo flow (local)
+| Nama | NRP | Kontribusi |
+|------|-----|------------|
+| Fico Simhanandi | 5027231002 | Smart Contract (Solidity, Testing, Deploy) |
+| Michael Kenneth Salim | 5027231008 | Frontend UI/UX (React, Components, Styling) |
+| Nathan Kho Pancras | 5027231002 | Integrasi Web3 (ethers.js, Wallet, Read/Write) |
 
-Open **two terminals**.
+## Tech Stack
 
-**Terminal 1 — local chain (keep running):**
+- **Frontend:** React 18 + Vite + Tailwind CSS v4 + Framer Motion
+- **Smart Contract:** Solidity 0.8.24 + Hardhat
+- **Web3 Library:** ethers.js v6
+- **Wallet:** MetaMask
+- **Routing:** React Router v7
+
+## Fitur
+
+- [x] Connect Wallet (MetaMask)
+- [x] Menampilkan daftar kandidat (Read)
+- [x] Menampilkan hasil voting / total votes (Read)
+- [x] Cek status sudah vote atau belum (Read)
+- [x] Cast vote untuk kandidat (Write)
+- [x] Owner menambah kandidat baru (Write — Admin page)
+- [x] Mencegah double voting (UI feedback + on-chain enforcement)
+- [x] Loading state saat transaksi pending
+- [x] Error handling user-friendly
+- [x] Network detection (warning jika bukan Hardhat Local)
+- [x] Live update via event listening (bonus)
+- [x] Responsive design (mobile-friendly)
+- [x] Multi-page navigation (Home, Vote, Results, Admin)
+
+## Struktur Project
+
+```
+├── contracts/
+│   └── Voting.sol              # Smart contract
+├── frontend/
+│   ├── src/
+│   │   ├── components/         # ConnectWallet, NavBar, CandidateList, etc.
+│   │   ├── hooks/              # useWallet, useContract
+│   │   ├── pages/              # Home, Vote, Results, Admin
+│   │   ├── utils/              # contract.js (address+ABI), helpers.js
+│   │   ├── App.jsx
+│   │   └── main.jsx
+│   ├── index.html
+│   ├── package.json
+│   └── vite.config.js
+├── tests/
+│   └── Voting.test.js          # 12 unit tests
+├── scripts/
+│   └── deploy.js
+├── context/
+│   └── project-03-dapp.md      # Project specification
+├── hardhat.config.js
+├── package.json
+└── README.md
+```
+
+## Cara Menjalankan
+
+### Prerequisites
+
+- Node.js v18+
+- MetaMask browser extension
+- Git
+
+### 1. Clone Repository
 
 ```bash
+git clone <url-repo>
+cd blockchain-project3-RumahMenur
+```
+
+### 2. Install Dependencies
+
+```bash
+# Root folder (smart contract)
 npm install
+
+# Frontend folder
+cd frontend
+npm install
+```
+
+### 3. Jalankan Local Blockchain
+
+```bash
+# Terminal 1 — biarkan berjalan
 npx hardhat node
 ```
 
-**Terminal 2 — deploy + frontend:**
+### 4. Deploy Smart Contract
 
 ```bash
-# Deploy. This also writes the address + ABI into the frontend automatically.
+# Terminal 2
 npx hardhat run scripts/deploy.js --network localhost
-
-cd frontend
-npm install
-npm run dev          # http://localhost:5173
 ```
 
-**In the browser:**
+Deploy script otomatis menulis address dan ABI ke `frontend/src/utils/contract.js`.
 
-1. In MetaMask, add/select the **Hardhat Local** network (RPC `http://127.0.0.1:8545`, chain id `31337`).
-2. Import one of the test accounts printed by `npx hardhat node` (use its private key).
-3. Click **Connect Wallet**, pick a candidate, **Vote**, and watch the tally update.
-4. Try voting again with the same account — the contract rejects it.
+### 5. Setup MetaMask
 
-## Contract tests
+1. Tambahkan network **Hardhat Local** di MetaMask:
+   - RPC URL: `http://127.0.0.1:8545`
+   - Chain ID: `31337`
+   - Currency: ETH
+2. Import salah satu private key yang dicetak oleh `npx hardhat node`
+
+### 6. Jalankan Frontend
+
+```bash
+cd frontend
+npm run dev
+```
+
+### 7. Buka Browser
+
+http://localhost:5173
+
+## Cara Penggunaan
+
+1. Klik **Connect Wallet** di navbar
+2. Di halaman **Vote**, pilih kandidat lalu klik **Cast Vote**
+3. Konfirmasi transaksi di MetaMask
+4. Lihat hasil di halaman **Results** (update real-time)
+5. Halaman **Admin** tersedia untuk owner (menambah kandidat)
+6. Coba vote lagi dengan akun yang sama — contract akan menolak
+
+## Contract Tests
 
 ```bash
 npx hardhat test     # 12 tests
@@ -63,42 +161,43 @@ npx hardhat test     # 12 tests
     getAllCandidates
       ✔ returns the full ballot
 
-  12 passing (755ms)
+  12 passing
 ```
 </details>
 
-## What the contract does
+## Smart Contract
 
-`Voting.sol`: multiple named candidates, one equally-weighted vote per address,
-enforced on-chain via a `hasVoted` mapping + `require` in a modifier. Emits a
-`Voted` event on each vote (the frontend listens to it for live updates). The
-deployer is the owner and can add candidates.
+`contracts/Voting.sol` — fitur utama:
 
-## Sepolia
+| Komponen | Detail |
+|----------|--------|
+| State Variables | `owner`, `candidates[]`, `totalVotes`, `hasVoted` mapping |
+| Functions | `vote()`, `addCandidate()`, `getCandidate()`, `getAllCandidates()`, `getCandidateCount()` |
+| Modifiers | `hasNotVoted`, `onlyOwner` |
+| Events | `Voted`, `CandidateAdded` |
 
-Sepolia is a public Ethereum test network — a real, shared blockchain that uses
-free, fake ETH. Deploying there gives the contract a permanent public address
-anyone can reach. The project is already wired for it: `hardhat.config.js` adds
-the `sepolia` network only when the env vars below are present, and the frontend
-already accepts both Hardhat Local (31337) and Sepolia (11155111).
+Model voting: multiple named candidates, single-choice, satu suara per address, bobot sama. Double-vote dicegah on-chain via mapping + modifier.
 
-### Setup
+## Contract Address
 
-1. Get a Sepolia **RPC URL** from a free [Alchemy](https://www.alchemy.com) or
-   [Infura](https://www.infura.io) app (Ethereum → Sepolia, copy the HTTPS endpoint).
-2. Create a **throwaway** MetaMask account and export its private key
-   (⋮ → Account details → Show private key). Use an account with no real funds.
-3. Fund it with free test ETH from a faucet
-   ([sepoliafaucet.com](https://sepoliafaucet.com) or the Google Cloud faucet).
-4. Copy `.env.example` to `.env` and fill in both values:
+- **Local:** `0x5FbDB2315678afecb367f032d93F642f64180aa3` (berubah tiap deploy ulang)
+- **Sepolia (bonus):** `0x8549AB42C16F4D581BBE4253fe3534f6e2c4Ab2A`
+
+## Deploy ke Sepolia
+
+1. Buat akun di [Alchemy](https://www.alchemy.com) → buat app Ethereum Sepolia → copy HTTPS endpoint
+2. Buat akun MetaMask throwaway, export private key, dan fund dengan test ETH dari faucet
+3. Copy `.env.example` ke `.env` dan isi:
 
    ```bash
    SEPOLIA_RPC_URL=https://eth-sepolia.g.alchemy.com/v2/XXXXXXXX
    PRIVATE_KEY=0xyour_throwaway_private_key
    ```
 
-### Deploy
+4. Deploy:
 
-```bash
-npx hardhat run scripts/deploy.js --network sepolia
-```
+   ```bash
+   npx hardhat run scripts/deploy.js --network sepolia
+   ```
+
+5. Switch MetaMask ke Sepolia, jalankan frontend, dan vote — sekarang transaksi nyata di testnet.
