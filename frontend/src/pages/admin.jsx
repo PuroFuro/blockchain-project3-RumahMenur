@@ -65,7 +65,7 @@ export default function AdminPage({
   };
 
   return (
-    <div className="max-w-3xl mx-auto px-4 pt-28 pb-16">
+    <div className="max-w-3xl mx-auto px-4 pt-8 pb-16">
       <div className="bg-card border border-border rounded-2xl p-6 md:p-8">
         <div className="mb-8 text-center">
           <h1 className="text-3xl md:text-4xl font-mono font-bold tracking-tight text-tulisan mb-2">
@@ -158,7 +158,7 @@ function Gate({ icon, title, body, tone = "warning" }) {
   const ring =
     tone === "error" ? "border-error/30 bg-error/5" : "border-border bg-card";
   return (
-    <div className="max-w-3xl mx-auto px-4 pt-28 pb-16">
+    <div className="max-w-3xl mx-auto px-4 pt-8 pb-16">
       <div className={`flex flex-col items-center justify-center text-center p-10 border rounded-2xl ${ring}`}>
         {icon}
         <h2 className="text-2xl font-mono font-bold mb-2 text-tulisan">{title}</h2>

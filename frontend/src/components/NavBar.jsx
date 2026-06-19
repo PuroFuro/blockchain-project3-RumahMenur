@@ -1,11 +1,21 @@
 import React, { useState } from 'react';
 import logo from '../assets/logo.svg';
 import AnimatedButton from './AnimatedButtons';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import { shortenAddress } from '../utils/helpers';
 
 export default function Navbar({ account, connecting, hasMetaMask, onConnect }) {
   const [isOpen, setIsOpen] = useState(false);
+
+  const linkClass = ({ isActive }) =>
+    `font-medium transition-opacity ${
+      isActive
+        ? 'text-accent opacity-100'
+        : 'text-tulisan opacity-80 hover:opacity-100'
+    }`;
+
+  const mobileLinkClass = ({ isActive }) =>
+    `font-medium py-1 ${isActive ? 'text-accent' : 'text-tulisan'}`;
 
   const walletLabel = !hasMetaMask
     ? 'Install MetaMask'
@@ -24,7 +34,7 @@ export default function Navbar({ account, connecting, hasMetaMask, onConnect }) 
   };
 
   return (
-    <nav className="w-full font-sans transition-colors duration-300 fixed top-0 z-50">
+    <nav className="w-full font-sans transition-colors duration-300 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto my-3 px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           
@@ -39,15 +49,15 @@ export default function Navbar({ account, connecting, hasMetaMask, onConnect }) 
 
           {/* Center/Right Side: Desktop Menu Links */}
           <div className="hidden md:flex items-center space-x-6">
-            <Link to="/vote" className="text-tulisan opacity-80 hover:opacity-100 font-medium transition-opacity">
+            <NavLink to="/vote" className={linkClass}>
               Vote
-            </Link>
-            <Link to="/results" className="text-tulisan opacity-80 hover:opacity-100 font-medium transition-opacity">
+            </NavLink>
+            <NavLink to="/results" className={linkClass}>
               Results
-            </Link>
-            <Link to="/admin" className="text-tulisan opacity-80 hover:opacity-100 font-medium transition-opacity">
+            </NavLink>
+            <NavLink to="/admin" className={linkClass}>
               Admin
-            </Link>
+            </NavLink>
             <AnimatedButton
               className="primary-btn text-sm"
               onClick={handleWallet}
@@ -77,15 +87,15 @@ export default function Navbar({ account, connecting, hasMetaMask, onConnect }) 
 
       {isOpen && (
         <div className="md:hidden bg-card border-b border-border px-4 pt-2 pb-4 space-y-3 flex flex-col">
-          <Link to="/vote" className="text-tulisan font-medium py-1">
+          <NavLink to="/vote" className={mobileLinkClass} onClick={() => setIsOpen(false)}>
             Vote
-          </Link>
-          <Link to="/results" className="text-tulisan font-medium py-1">
+          </NavLink>
+          <NavLink to="/results" className={mobileLinkClass} onClick={() => setIsOpen(false)}>
             Results
-          </Link>
-          <Link to="/admin" className="text-tulisan font-medium py-1">
+          </NavLink>
+          <NavLink to="/admin" className={mobileLinkClass} onClick={() => setIsOpen(false)}>
             Admin
-          </Link>
+          </NavLink>
           <AnimatedButton
             className="primary-btn w-full mt-2"
             onClick={handleWallet}

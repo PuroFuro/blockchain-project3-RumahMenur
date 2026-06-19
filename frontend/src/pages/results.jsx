@@ -28,7 +28,7 @@ export default function ResultsPage({ candidates = [], totalVotes }) {
   };
 
   return (
-    <div className="max-w-3xl mx-auto px-4 pt-28 pb-16">
+    <div className="max-w-3xl mx-auto px-4 pt-8 pb-16">
       <div className="bg-card border border-border rounded-2xl p-6 md:p-8">
         <div className="mb-8 text-center">
           <h1 className="text-3xl md:text-4xl font-mono font-bold tracking-tight text-tulisan mb-2">

@@ -177,10 +177,10 @@ export default function VotePage({
   );
 }
 
-/* Shared layout wrapper: clears the fixed navbar and centers the content. */
+/* Shared layout wrapper: centers the content with consistent page padding. */
 function PageShell({ children }) {
   return (
-    <div className="max-w-3xl mx-auto px-4 pt-28 pb-16">{children}</div>
+    <div className="max-w-3xl mx-auto px-4 pt-8 pb-16">{children}</div>
   );
 }
 

@@ -64,24 +64,26 @@ function App() {
 
   return (
     <Router>
-      <Navbar
-        account={account}
-        connecting={connecting}
-        hasMetaMask={hasMetaMask}
-        onConnect={connect}
-      />
+      <div className="flex min-h-screen flex-col">
+        <Navbar
+          account={account}
+          connecting={connecting}
+          hasMetaMask={hasMetaMask}
+          onConnect={connect}
+        />
 
-      <main className="min-h-[calc(100vh-4rem)]">
-        <div className="max-w-3xl mx-auto px-4 pt-24">
-          <NetworkBanner
-            deployed={deployed}
-            wrongNetwork={wrongNetwork}
-            account={account}
-          />
-          <Notification status={status} />
-        </div>
+        <main className="flex flex-1 flex-col">
+          <div className="max-w-3xl mx-auto w-full px-4 pt-4">
+            <NetworkBanner
+              deployed={deployed}
+              wrongNetwork={wrongNetwork}
+              account={account}
+            />
+          </div>
 
-        <Routes>
+          <Notification status={status} onClose={() => setStatus(null)} />
+
+          <Routes>
           <Route
             path="/"
             element={<Home isConnected={!!account} connectWallet={connect} />}
@@ -112,8 +114,9 @@ function App() {
               />
             }
           />
-        </Routes>
-      </main>
+          </Routes>
+        </main>
+      </div>
     </Router>
   );
 }
