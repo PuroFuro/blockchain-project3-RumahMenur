@@ -1,7 +1,9 @@
-import logo from "../assets/logo.svg";
+import { useNavigate } from "react-router-dom";
 import AnimatedButton from "../components/AnimatedButtons";
 
 export default function Home() {
+    const navigate = useNavigate();
+
     return (
         <>
             <div className="flex flex-col items-center justify-center min-h-screen px-4">
@@ -11,7 +13,9 @@ export default function Home() {
                     </p>
 
                     <div>
-                        <AnimatedButton className="mt-2">Start Voting</AnimatedButton>
+                        <AnimatedButton className="mt-2" onClick={() => navigate("/vote")}>
+                            Start Voting
+                        </AnimatedButton>
                     </div>
             </div>
         </>

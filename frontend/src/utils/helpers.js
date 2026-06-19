@@ -1,9 +1,21 @@
 // Small, dependency-free helpers shared across components.
 
-// Hardhat's local chain id. The frontend warns if MetaMask is on anything else.
-// (31337 = 0x7a69. The default `npx hardhat node` chain.)
-export const EXPECTED_CHAIN_ID = 31337n;
-export const EXPECTED_NETWORK_NAME = "Hardhat Local (31337)";
+// Chains the dApp supports. The frontend warns if MetaMask is on anything else.
+// 31337 = 0x7a69 (default `npx hardhat node`); 11155111 = Sepolia testnet.
+// Add a chain here to support deploying the same build to it.
+export const SUPPORTED_CHAINS = new Map([
+  [31337n, "Hardhat Local (31337)"],
+  [11155111n, "Sepolia"],
+]);
+
+/** True when MetaMask is on one of the chains we deploy to. */
+export function isSupportedChain(chainId) {
+  return chainId != null && SUPPORTED_CHAINS.has(chainId);
+}
+
+// Human-readable list for the "wrong network" prompt, e.g.
+// "Hardhat Local (31337) or Sepolia".
+export const SUPPORTED_NETWORK_NAMES = [...SUPPORTED_CHAINS.values()].join(" or ");
 
 export const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
 

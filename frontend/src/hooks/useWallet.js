@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { BrowserProvider } from "ethers";
-import { EXPECTED_CHAIN_ID } from "../utils/helpers";
+import { isSupportedChain } from "../utils/helpers";
 
 /**
  * Owns the MetaMask connection: account, chainId, and an ethers v6
@@ -83,7 +83,7 @@ export function useWallet() {
     };
   }, [hasMetaMask, refreshChain]);
 
-  const wrongNetwork = chainId != null && chainId !== EXPECTED_CHAIN_ID;
+  const wrongNetwork = chainId != null && !isSupportedChain(chainId);
 
   return {
     hasMetaMask,

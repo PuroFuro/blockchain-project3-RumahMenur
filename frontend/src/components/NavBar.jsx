@@ -2,9 +2,26 @@ import React, { useState } from 'react';
 import logo from '../assets/logo.svg';
 import AnimatedButton from './AnimatedButtons';
 import { Link } from 'react-router-dom';
+import { shortenAddress } from '../utils/helpers';
 
-export default function Navbar() {
+export default function Navbar({ account, connecting, hasMetaMask, onConnect }) {
   const [isOpen, setIsOpen] = useState(false);
+
+  const walletLabel = !hasMetaMask
+    ? 'Install MetaMask'
+    : account
+    ? shortenAddress(account)
+    : connecting
+    ? 'Connecting…'
+    : 'Connect Wallet';
+
+  const handleWallet = () => {
+    if (!hasMetaMask) {
+      window.open('https://metamask.io/download/', '_blank', 'noreferrer');
+      return;
+    }
+    if (!account) onConnect?.();
+  };
 
   return (
     <nav className="w-full font-sans transition-colors duration-300 fixed top-0 z-50">
@@ -31,8 +48,11 @@ export default function Navbar() {
             <Link to="/admin" className="text-tulisan opacity-80 hover:opacity-100 font-medium transition-opacity">
               Admin
             </Link>
-            <AnimatedButton className="primary-btn text-sm">
-              Connect Wallet
+            <AnimatedButton
+              className="primary-btn text-sm"
+              onClick={handleWallet}
+            >
+              {walletLabel}
             </AnimatedButton>
           </div>
 
@@ -66,8 +86,11 @@ export default function Navbar() {
           <Link to="/admin" className="text-tulisan font-medium py-1">
             Admin
           </Link>
-          <AnimatedButton className="primary-btn w-full mt-2">
-            Connect Wallet
+          <AnimatedButton
+            className="primary-btn w-full mt-2"
+            onClick={handleWallet}
+          >
+            {walletLabel}
           </AnimatedButton>
         </div>
       )}

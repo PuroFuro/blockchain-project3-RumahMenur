@@ -15,6 +15,7 @@ export function useContract(provider, account) {
   const [candidates, setCandidates] = useState([]);
   const [totalVotes, setTotalVotes] = useState(0n);
   const [hasVoted, setHasVoted] = useState(false);
+  const [owner, setOwner] = useState(null);
   const [loadingState, setLoadingState] = useState(true);
 
   const deployed = isContractDeployed(CONTRACT_ADDRESS);
@@ -33,9 +34,10 @@ export function useContract(provider, account) {
     }
     setLoadingState(true);
     try {
-      const [rawCandidates, total] = await Promise.all([
+      const [rawCandidates, total, contractOwner] = await Promise.all([
         readContract.getAllCandidates(),
         readContract.totalVotes(),
+        readContract.owner(),
       ]);
 
       setCandidates(
@@ -46,6 +48,7 @@ export function useContract(provider, account) {
         }))
       );
       setTotalVotes(total);
+      setOwner(contractOwner);
 
       if (account) {
         setHasVoted(await readContract.hasVoted(account));
@@ -99,11 +102,16 @@ export function useContract(provider, account) {
     [provider, refresh]
   );
 
+  const isOwner =
+    !!account && !!owner && account.toLowerCase() === owner.toLowerCase();
+
   return {
     deployed,
     candidates,
     totalVotes,
     hasVoted,
+    owner,
+    isOwner,
     loadingState,
     refresh,
     castVote,
